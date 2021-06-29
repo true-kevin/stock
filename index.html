@@ -169,10 +169,24 @@
         function add_sel_input_block() {
             var target_block = $(".sel_input_block").length > 0 ? $(".sel_input_block").eq($(".sel_input_block").length - 1).clone(true) : sel_input_block;
             target_block.clone(true).appendTo('#sel_price_box');
+
+            var sel_input_len = $(".sel_input_block").length;
+            var buy_total_cnt = MI($('#buy_cnt').text());
+            var di_cnt = parseInt(buy_total_cnt / sel_input_len);
+            var rem_cnt = buy_total_cnt % sel_input_len;
+            $(".sel_input_block input[name='sel_cnt[]']").val(di_cnt);
+            $(".sel_input_block input[name='sel_cnt[]']").eq(sel_input_len-1).val(di_cnt+rem_cnt);
         }
 
         function del_sel_input_block(el) {
             $(el).closest('.sel_input_block').remove();
+            
+            var sel_input_len = $(".sel_input_block").length;
+            var buy_total_cnt = MI($('#buy_cnt').text());
+            var di_cnt = parseInt(buy_total_cnt / sel_input_len);
+            var rem_cnt = buy_total_cnt % sel_input_len;
+            $(".sel_input_block input[name='sel_cnt[]']").val(di_cnt);
+            $(".sel_input_block input[name='sel_cnt[]']").eq(sel_input_len-1).val(di_cnt+rem_cnt);
         }
 
         function cal_profit() {
