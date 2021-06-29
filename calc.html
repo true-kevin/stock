@@ -1,0 +1,302 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <title>분할 매수/매도 계산기</title>
+</head>
+
+<body>
+    <style>
+        .input_price {
+            width: 90px;
+        }
+
+        .input_cnt,
+        #fee_box input[type=text] {
+            width: 60px;
+        }
+    </style>
+    <div class="contaier" style="display: inline-block;margin: 0 auto;">
+        <button type="button" onclick="fee_box_toggle()">수수료 보기</button>
+        <div id="fee_box" style="display: none;">
+            거래 수수료: <input type="text" name="trading_fees" value="0.015" onchange="set_fees()">
+            세금: <input type="text" name="tax_fees" value="0.23" onchange="set_fees()">
+        </div>
+        <div class="buy_price_area">
+            <div id="buy_price_box">
+                <div class="buy_input_block input_block">
+                    <button type="button" onclick="del_buy_input_block(this)">X</button>
+                    <input placeholder="금액" type="text" name="buy_price[]" class="input_price">
+                    <button type="button" onclick="up_quote_unit(this)">+</button>
+                    <button type="button" onclick="down_quote_unit(this)">-</button>
+                    /
+                    <input placeholder="수량" type="text" name="buy_cnt[]" class="input_cnt">
+                    <button type="button" onclick="up_cnt(this)">+</button>
+                    <button type="button" onclick="down_cnt(this)">-</button>
+                </div>
+            </div>
+            <div>
+                <button type="button" onclick="add_buy_input_block()">매수 추가하기</button>
+            </div>
+            <div>
+                <button type="button" onclick="cal_avg_price()">매수 평단가 계산하기</button>
+            </div>
+            <div class="buy_result" style="display: none;">
+                <ul>
+                    <li>
+                        <span>매수량: </span><span id="buy_cnt"></span>주
+                    </li>
+                    <li>
+                        <span>매수금액: </span><span id="total_buy_price"></span>원
+                    </li>
+                    <li>
+                        <span>매수 평균 단가: </span><span id="avg_price"></span>원
+                    </li>
+                    <li>
+                        <span>제비용 포함 평균단가: </span><span id="real_avg_price"></span>원
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="sel_price_area" style="display: none;">
+            <div id="sel_price_box">
+                <div class="sel_input_block input_block">
+                    <button type="button" onclick="del_sel_input_block(this)">X</button>
+                    <input placeholder="금액" type="text" name="sel_price[]" class="input_price">
+                    <button type="button" onclick="up_quote_unit(this)">+</button>
+                    <button type="button" onclick="down_quote_unit(this)">-</button>
+                    /
+                    <input placeholder="수량" type="text" name="sel_cnt[]" class="input_cnt">
+                    <button type="button" onclick="up_cnt(this)">+</button>
+                    <button type="button" onclick="down_cnt(this)">-</button>
+                </div>
+            </div>
+            <div>
+                <button type="button" onclick="add_sel_input_block()">매도 추가하기</button>
+            </div>
+            <div>
+                <button type="button" onclick="cal_profit()">매도 손익 계산하기</button>
+                <span class="notice_over_cnt" style="color: red;display: none;">매수량보다 매도량이 많습니다.</span>
+            </div>
+            <div class="sel_result" style="display: none;">
+                <ul>
+                    <li>
+                        <span>매도량: </span><span id="sel_cnt"></span>주
+                    </li>
+                    <li>
+                        <span>잔여량: </span><span id="remaining_cnt"></span>주
+                    </li>
+                    <li>
+                        <span>매도금액: </span><span id="total_sel_price"></span>원
+                    </li>
+                    <li>
+                        <span>매도 평균 단가: </span><span id="sel_avg_price"></span>원
+                    </li>
+                    <li>
+                        <span>손익금: </span><span id="profit"></span>원
+                        <span>(<span id="profit_per"></span>%)</span>
+                    </li>
+                    <li>
+                        <span>제비용 포함 손익금: </span><span id="real_profit"></span>원
+                        <span>(<span id="real_profit_per"></span>%)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var trading_fees = parseFloat($('input[name=trading_fees]').val()) / 100;
+        var tax_fees = parseFloat($('input[name=tax_fees]').val()) / 100;
+
+        function set_fees() {
+            trading_fees = parseFloat($('input[name=trading_fees]').val()) / 100;
+            tax_fees = parseFloat($('input[name=tax_fees]').val()) / 100;
+        }
+
+        var buy_input_block = $(".buy_input_block").eq(0).clone(true);
+        var sel_input_block = $(".sel_input_block").eq(0).clone(true);
+
+        function add_buy_input_block() {
+            var target_block = $(".buy_input_block").length > 0 ? $(".buy_input_block").eq($(".buy_input_block").length - 1).clone(true) : buy_input_block;
+            target_block.clone(true).appendTo('#buy_price_box');
+        }
+
+        function del_buy_input_block(el) {
+            $(el).closest('.buy_input_block').remove();
+        }
+
+        function cal_avg_price() {
+            var buy_price_list = $(".buy_input_block");
+            var len = buy_price_list.length;
+            var total_cnt = 0;
+            var totla_price = 0;
+            for (var i = 0; i < len; i++) {
+                var buy_price = parseInt(buy_price_list.eq(i).find("input[name='buy_price[]'").val());
+                buy_price = buy_price ? buy_price : 0;
+                var buy_cnt = parseInt(buy_price_list.eq(i).find("input[name='buy_cnt[]'").val());
+                buy_cnt = buy_cnt ? buy_cnt : 0;
+                total_cnt += buy_cnt;
+                totla_price += buy_cnt * buy_price;
+            }
+            var avg_price = totla_price / total_cnt;
+            avg_price = avg_price ? avg_price : 0;
+            real_avg_price = parseInt(avg_price + (avg_price * (trading_fees * 2 + tax_fees)));
+
+            $('#buy_cnt').html(AC(total_cnt));
+            $('#total_buy_price').html(AC(totla_price));
+            $('#avg_price').html(AC(parseInt(avg_price)));
+            $('#real_avg_price').html(AC(real_avg_price));
+
+            $('.sel_input_block').remove();
+            add_sel_input_block();
+            $('.sel_input_block').eq(0).find("input[name='sel_price[]']").val(get_up_quote_unit(parseInt(avg_price)));
+            $('.sel_input_block').eq(0).find("input[name='sel_cnt[]']").val(total_cnt);
+
+            $('.buy_result').show();
+            $('.sel_price_area').show();
+            $('.sel_result').hide();
+        }
+
+        function add_sel_input_block() {
+            var target_block = $(".sel_input_block").length > 0 ? $(".sel_input_block").eq($(".sel_input_block").length - 1).clone(true) : sel_input_block;
+            target_block.clone(true).appendTo('#sel_price_box');
+        }
+
+        function del_sel_input_block(el) {
+            $(el).closest('.sel_input_block').remove();
+        }
+
+        function cal_profit() {
+            var buy_avg_price = MI($('#avg_price').text());
+            var real_buy_avg_price = MI($('#real_avg_price').text());
+            var total_buy_price = MI($('#total_buy_price').text());
+            var buy_total_cnt = MI($('#buy_cnt').text());
+
+            var sel_price_list = $(".sel_input_block");
+            var len = sel_price_list.length;
+            var sel_total_cnt = 0;
+            var sel_totla_price = 0;
+            for (var i = 0; i < len; i++) {
+                var sel_price = parseInt(sel_price_list.eq(i).find("input[name='sel_price[]'").val());
+                sel_price = sel_price ? sel_price : 0;
+                var sel_cnt = parseInt(sel_price_list.eq(i).find("input[name='sel_cnt[]'").val());
+                sel_cnt = sel_cnt ? sel_cnt : 0;
+                sel_total_cnt += sel_cnt;
+                sel_totla_price += sel_cnt * sel_price;
+            }
+            var sel_avg_price = sel_totla_price / sel_total_cnt;
+            sel_avg_price = sel_avg_price ? sel_avg_price : 0;
+
+            var remaining_cnt = buy_total_cnt - sel_total_cnt;
+            if (remaining_cnt < 0) {
+                $('.notice_over_cnt').show();
+                return false;
+            } else {
+                $('.notice_over_cnt').hide();
+            }
+
+            var profit = (sel_avg_price - buy_avg_price) * sel_total_cnt;
+            var real_profit = profit - (total_buy_price * trading_fees) - (sel_totla_price * trading_fees) - (sel_totla_price * tax_fees);
+
+            var profit_per = Math.floor(profit / total_buy_price * 10000) / 100;
+            var real_profit_per = Math.floor(real_profit / total_buy_price * 10000) / 100;
+
+            $('#sel_cnt').html(AC(sel_total_cnt));
+            $('#remaining_cnt').html(AC(remaining_cnt));
+            $('#total_sel_price').html(AC(sel_totla_price));
+            $('#sel_avg_price').html(AC(Math.floor(sel_avg_price)));
+            $('#profit').html(AC(Math.floor(profit)));
+            $('#real_profit').html(AC(Math.floor(real_profit)));
+            $('#profit_per').html(profit_per);
+            $('#real_profit_per').html(real_profit_per);
+
+            $('.sel_result').show();
+
+        }
+
+        function fee_box_toggle() {
+            $('#fee_box').toggle();
+        }
+
+        function AC(num) {
+            var regexp = /\B(?=(\d{3})+(?!\d))/g;
+            return num.toString().replace(regexp, ',');
+        }
+
+        function MI(str) {
+            var regexp = /[^0-9]/g;
+            return parseInt(str.replace(regexp, ''));
+        }
+
+        function get_quote_unit(price) {
+            var quote_unit;
+            if (price < 1000) {
+                quote_unit = 1;
+            } else if (price < 5000) {
+                quote_unit = 5;
+            } else if (price < 10000) {
+                quote_unit = 10;
+            } else if (price < 50000) {
+                quote_unit = 50;
+            } else if (price < 100000) {
+                quote_unit = 100;
+            } else if (price < 500000) {
+                quote_unit = 500;
+            } else {
+                quote_unit = 1000;
+            }
+            return quote_unit;
+        }
+
+        function get_up_quote_unit(price) {
+            price = parseInt(price);
+            quote_unit = get_quote_unit(price);
+            return Math.floor(price / quote_unit) * quote_unit + quote_unit;
+        }
+
+        function get_down_quote_unit(price) {
+            price = parseInt(price);
+            quote_unit = get_quote_unit(price);
+            return Math.ceil(price / quote_unit) * quote_unit - quote_unit;
+        }
+
+        function up_quote_unit(el) {
+            console.log(el);
+            var price = parseInt($(el).closest('.input_block').find('.input_price').val());
+            price = price ? price : 0;
+            var up_price = get_up_quote_unit(price);
+            $(el).closest('.input_block').find('.input_price').val(up_price);
+        }
+
+        function down_quote_unit(el) {
+            var price = parseInt($(el).closest('.input_block').find('.input_price').val());
+            price = price ? price : 0;
+            var down_price = get_down_quote_unit(price);
+            $(el).closest('.input_block').find('.input_price').val(down_price);
+        }
+
+        function up_cnt(el) {
+            var cnt = parseInt($(el).closest('.input_block').find('.input_cnt').val());
+            cnt = cnt ? cnt : 0;
+            $(el).closest('.input_block').find('.input_cnt').val(cnt + 1);
+        }
+
+        function down_cnt(el) {
+            var cnt = parseInt($(el).closest('.input_block').find('.input_cnt').val());
+            cnt = cnt ? cnt : 0;
+            $(el).closest('.input_block').find('.input_cnt').val(cnt - 1);
+        }
+
+    </script>
+</body>
+
+</html>
