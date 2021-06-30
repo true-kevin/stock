@@ -36,9 +36,9 @@
             <button type="button" onclick="fee_box_toggle()" class="ui primary basic button tiny">수수료 보기</button>
         </div>
         <div id="fee_box" style="display: none;text-align:right;margin:0.5em 0.5em 0 0">
-            거래 수수료: <input type="number" pattern="\d*" name="trading_fees" value="0.015" onchange="set_fees()"> %
+            <span style="font-weight:bold">거래 수수료:</span> <input type="number" pattern="\d*" name="trading_fees" value="0.015" onchange="set_fees()"> %
             &nbsp;
-            세금: <input type="number" pattern="\d*" name="tax_fees" value="0.23" onchange="set_fees()"> %
+            <span style="font-weight:bold">세금:</span> <input type="number" pattern="\d*" name="tax_fees" value="0.23" onchange="set_fees()"> %
             <div style="color:red;font-size:1em;">수수료를 수정 해서 계산이 가능합니다.</div>
         </div>
         <div class="buy_price_area" style="margin-top:1em;text-align:center;">
