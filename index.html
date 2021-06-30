@@ -21,7 +21,7 @@
         .input_cnt{
             width: 60px;
         }
-        #fee_box input[type=number] {width:45px;}
+        #fee_box input[type=number] {width:50px;}
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -37,6 +37,7 @@
         </div>
         <div id="fee_box" style="display: none;text-align:right;margin:0.5em 0.5em 0 0">
             거래 수수료: <input type="number" pattern="\d*" name="trading_fees" value="0.015" onchange="set_fees()"> %
+            &nbsp;
             세금: <input type="number" pattern="\d*" name="tax_fees" value="0.23" onchange="set_fees()"> %
         </div>
         <div class="buy_price_area" style="margin-top:1em;text-align:center;">
