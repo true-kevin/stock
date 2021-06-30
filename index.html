@@ -19,7 +19,7 @@
         }
 
         .input_cnt,
-        #fee_box input[type=text] {
+        #fee_box input[type=number] {
             width: 60px;
         }
         input[type="number"]::-webkit-outer-spin-button,
@@ -27,7 +27,6 @@
             -webkit-appearance: none;
             margin: 0;
         }
-        
     </style>
     <div class="contaier" style="display: inline-block;margin: 0 auto;">
         <button type="button" onclick="fee_box_toggle()">수수료 보기</button>
@@ -315,7 +314,7 @@
             cnt = cnt ? cnt : 0;
             $(el).closest('.input_block').find('.input_cnt').val(cnt - 1);
         }
-        
+
     </script>
 </body>
 
