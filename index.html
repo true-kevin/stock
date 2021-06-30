@@ -29,30 +29,32 @@
         }
     </style>
     <div class="contaier" style="display: inline-block;margin: 0 auto;">
-        <button type="button" onclick="fee_box_toggle()">수수료 보기</button>
+        <div style="text-align:right;">
+            <button type="button" onclick="fee_box_toggle()" class="ui primary basic button tiny">수수료 보기</button>
+        </div>
         <div id="fee_box" style="display: none;">
             거래 수수료: <input type="number" pattern="\d*" name="trading_fees" value="0.015" onchange="set_fees()">
             세금: <input type="number" pattern="\d*" name="tax_fees" value="0.23" onchange="set_fees()">
         </div>
-        <div class="buy_price_area">
+        <div class="buy_price_area" style="margin-top:1em">
             <div id="buy_price_box">
-                <div class="buy_input_block input_block">
-                    <button type="button" onclick="down_quote_unit(this)">-</button>
+                <div class="buy_input_block input_block" style="margin-bottom:0.5em;">
+                    <i class="minus icon" onclick="down_quote_unit(this)"></i>
                     <input placeholder="금액" type="number" pattern="\d*" name="buy_price[]" class="input_price">
-                    <button type="button" onclick="up_quote_unit(this)">+</button>
+                    <i class="plus icon" onclick="up_quote_unit(this)"></i>
                     &nbsp;
-                    <button type="button" onclick="down_cnt(this)">-</button>
+                    <i class="minus icon" onclick="down_cnt(this)"></i>
                     <input placeholder="수량" type="number" pattern="\d*" name="buy_cnt[]" class="input_cnt">
-                    <button type="button" onclick="up_cnt(this)">+</button>
+                    <i class="plus icon" onclick="up_cnt(this)"></i>
                     &nbsp;
-                    <button type="button" onclick="del_buy_input_block(this)">X</button>
+                    <i class="window close icon red" style="font-size:1.25em" onclick="del_buy_input_block(this)"></i>
                 </div>
             </div>
-            <div>
-                <button type="button" onclick="add_buy_input_block()">매수 추가하기</button>
+            <div style="text-align:center;margin-top:0.5em;">
+                <button type="button" onclick="add_buy_input_block()" class="mini ui gray button" style="text-align:center;"><i class="plus icon"></i></button>
             </div>
-            <div>
-                <button type="button" onclick="cal_avg_price()">매수 평단가 계산하기</button>
+            <div style="text-align:center;margin-top:1em;">
+                <button class="ui red button" type="button" onclick="cal_avg_price()">매수 평단가 계산하기</button>
             </div>
             <div class="buy_result" style="display: none;">
                 <ul>
@@ -72,25 +74,25 @@
             </div>
         </div>
 
-        <div class="sel_price_area" style="display: none;">
+        <div class="sel_price_area" style="display: none; margin-top:1em;">
             <div id="sel_price_box">
-                <div class="sel_input_block input_block">
-                    <button type="button" onclick="down_quote_unit(this)">-</button>
+                <div class="sel_input_block input_block" style="margin-bottom:0.5em;">
+                    <i class="minus icon" onclick="down_quote_unit(this)"></i>
                     <input placeholder="금액" type="number" pattern="\d*" name="sel_price[]" class="input_price">
-                    <button type="button" onclick="up_quote_unit(this)">+</button>
+                    <i class="plus icon" onclick="up_quote_unit(this)"></i>
                     &nbsp;
-                    <button type="button" onclick="down_cnt(this)">-</button>
+                    <i class="minus icon" onclick="down_cnt(this)"></i>
                     <input placeholder="수량" type="number" pattern="\d*" name="sel_cnt[]" class="input_cnt">
-                    <button type="button" onclick="up_cnt(this)">+</button>
+                    <i class="plus icon" onclick="up_cnt(this)"></i>
                     &nbsp;
-                    <button type="button" onclick="del_sel_input_block(this)">X</button>
+                    <i class="window close icon red" style="font-size:1.25em" onclick="del_sel_input_block(this)"></i>
                 </div>
             </div>
-            <div>
-                <button type="button" onclick="add_sel_input_block()">매도 추가하기</button>
+            <div style="text-align:center;margin-top:0.5em;">
+                <button type="button" onclick="add_sel_input_block()" class="mini ui gray button" style="text-align:center;"><i class="plus icon"></i></button>
             </div>
-            <div>
-                <button type="button" onclick="cal_profit()">매도 손익 계산하기</button>
+            <div style="text-align:center;margin-top:1em;">
+                <button class="ui blue button" type="button" onclick="cal_profit()">매도 손익 계산하기</button>
                 <span class="notice_over_cnt" style="color: red;display: none;">매수량보다 매도량이 많습니다.</span>
             </div>
             <div class="sel_result" style="display: none;">
