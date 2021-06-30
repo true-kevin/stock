@@ -18,10 +18,10 @@
             width: 90px;
         }
 
-        .input_cnt,
-        #fee_box input[type=number] {
+        .input_cnt{
             width: 60px;
         }
+        #fee_box input[type=number] {width:45px;}
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -36,8 +36,8 @@
             <button type="button" onclick="fee_box_toggle()" class="ui primary basic button tiny">수수료 보기</button>
         </div>
         <div id="fee_box" style="display: none;text-align:right;margin:0.5em 0.5em 0 0">
-            거래 수수료: <input type="number" pattern="\d*" name="trading_fees" value="0.015" onchange="set_fees()">
-            세금: <input type="number" pattern="\d*" name="tax_fees" value="0.23" onchange="set_fees()">
+            거래 수수료: <input type="number" pattern="\d*" name="trading_fees" value="0.015" onchange="set_fees()"> %
+            세금: <input type="number" pattern="\d*" name="tax_fees" value="0.23" onchange="set_fees()"> %
         </div>
         <div class="buy_price_area" style="margin-top:1em;text-align:center;">
             <h2 class="ui header red" style="margin:0.5em;">분할 매수</h2>
