@@ -27,6 +27,9 @@
             -webkit-appearance: none;
             margin: 0;
         }
+
+        .plus_color {color:red}
+        .minus_color {color:blue}
     </style>
     <div class="contaier" style="width:100%;max-width:500px;margin:0 auto">
         <div style="text-align:right;margin:0.5em 0.5em 0 0">
@@ -68,7 +71,7 @@
                     <li>
                         <span>매수 평균 단가: </span><span id="avg_price"></span>원
                     </li>
-                    <li>
+                    <li style="font-weight:bold">
                         <span>제비용 포함 평균단가: </span><span id="real_avg_price"></span>원
                     </li>
                 </ul>
@@ -111,12 +114,18 @@
                         <span>매도 평균 단가: </span><span id="sel_avg_price"></span>원
                     </li>
                     <li>
-                        <span>손익금: </span><span id="profit"></span>원
-                        <span>(<span id="profit_per"></span>%)</span>
+                        <span>손익금: </span>
+                        <span class="profit_area">
+                            <span id="profit"></span>원
+                            <span>(<span id="profit_per"></span>%)</span>
+                        </span>
                     </li>
-                    <li>
-                        <span>제비용 포함 손익금: </span><span id="real_profit"></span>원
-                        <span>(<span id="real_profit_per"></span>%)</span>
+                    <li style="font-weight:bold">
+                        <span>제비용 포함 손익금: </span>
+                        <span class="real_profit_area">
+                            <span id="real_profit"></span>원
+                            <span>(<span id="real_profit_per"></span>%)</span>
+                        </span>
                     </li>
                 </ul>
             </div>
@@ -233,6 +242,21 @@
 
             var profit_per = Math.round(profit / total_buy_price * 10000) / 100;
             var real_profit_per = Math.round(real_profit / total_buy_price * 10000) / 100;
+
+            $('.profit_area, .real_profit_area').removeClass('plus_color');
+            $('.profit_area, .real_profit_area').removeClass('minus_color');
+            
+            if(profit > 0){
+                $('.profit_area').addClass('plus_color');
+            } else if (profit < 0){
+                $('.profit_area').addClass('minus_color');
+            }
+
+            if(real_profit > 0){
+                $('.real_profit_area').addClass('plus_color');
+            } else if (real_profit < 0){
+                $('.real_profit_area').addClass('minus_color');
+            }
 
             $('#sel_cnt').html(AC(sel_total_cnt));
             $('#remaining_cnt').html(AC(remaining_cnt));
