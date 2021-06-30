@@ -28,15 +28,15 @@
             margin: 0;
         }
     </style>
-    <div class="contaier" style="display: inline-block;margin: 0 auto;">
-        <div style="text-align:right;">
+    <div class="contaier" style="width:100%;max-width:500px;">
+        <div style="text-align:right;margin:0.5em 0.5em 0 0">
             <button type="button" onclick="fee_box_toggle()" class="ui primary basic button tiny">수수료 보기</button>
         </div>
         <div id="fee_box" style="display: none;">
             거래 수수료: <input type="number" pattern="\d*" name="trading_fees" value="0.015" onchange="set_fees()">
             세금: <input type="number" pattern="\d*" name="tax_fees" value="0.23" onchange="set_fees()">
         </div>
-        <div class="buy_price_area" style="margin-top:1em">
+        <div class="buy_price_area" style="margin-top:1em;text-align:center;">
             <div id="buy_price_box">
                 <div class="buy_input_block input_block" style="margin-bottom:0.5em;">
                     <i class="minus icon" onclick="down_quote_unit(this)"></i>
