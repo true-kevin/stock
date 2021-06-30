@@ -36,8 +36,8 @@
             거래 수수료: <input type="number" pattern="\d*" name="trading_fees" value="0.015" onchange="set_fees()">
             세금: <input type="number" pattern="\d*" name="tax_fees" value="0.23" onchange="set_fees()">
         </div>
-        <h1 class="ui header">분할 매수</h1>
         <div class="buy_price_area" style="margin-top:1em;text-align:center;">
+            <h2 class="ui header red" style="margin:0.5em;">분할 매수</h2>
             <div id="buy_price_box">
                 <div class="buy_input_block input_block" style="margin-bottom:0.5em;">
                     <i class="minus icon" onclick="down_quote_unit(this)"></i>
@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div style="text-align:center;margin-top:0.5em;">
-                <button type="button" onclick="add_buy_input_block()" class="mini ui gray button" style="text-align:center;"><i class="plus icon"></i></button>
+                <button type="button" onclick="add_buy_input_block()" class="mini ui gray button" style="text-align:center;padding-left: 2em;"><i class="plus icon"></i></button>
             </div>
             <div style="text-align:center;margin-top:1em;">
                 <button class="ui red button" type="button" onclick="cal_avg_price()">매수 평단가 계산하기</button>
@@ -74,9 +74,8 @@
                 </ul>
             </div>
         </div>
-
-        <h1 class="ui header">분할 매도</h1>
         <div class="sel_price_area" style="display: none; margin-top:1em;text-align:center;">
+            <h2 class="ui header blue" style="margin:0.5em;">분할 매도</h2>
             <div id="sel_price_box">
                 <div class="sel_input_block input_block" style="margin-bottom:0.5em;">
                     <i class="minus icon" onclick="down_quote_unit(this)"></i>
@@ -91,7 +90,7 @@
                 </div>
             </div>
             <div style="text-align:center;margin-top:0.5em;">
-                <button type="button" onclick="add_sel_input_block()" class="mini ui gray button" style="text-align:center;"><i class="plus icon"></i></button>
+                <button type="button" onclick="add_sel_input_block()" class="mini ui gray button" style="text-align:center;padding-left: 2em;"><i class="plus icon"></i></button>
             </div>
             <div style="text-align:center;margin-top:1em;">
                 <button class="ui blue button" type="button" onclick="cal_profit()">매도 손익 계산하기</button>
