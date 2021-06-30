@@ -37,14 +37,15 @@
         <div class="buy_price_area">
             <div id="buy_price_box">
                 <div class="buy_input_block input_block">
-                    <button type="button" onclick="del_buy_input_block(this)">X</button>
+                    <button type="button" onclick="down_quote_unit(this)">-</button>
                     <input placeholder="금액" type="number" pattern="\d*" name="buy_price[]" class="input_price">
                     <button type="button" onclick="up_quote_unit(this)">+</button>
-                    <button type="button" onclick="down_quote_unit(this)">-</button>
-                    /
+                    &nbsp;
+                    <button type="button" onclick="down_cnt(this)">-</button>
                     <input placeholder="수량" type="number" pattern="\d*" name="buy_cnt[]" class="input_cnt">
                     <button type="button" onclick="up_cnt(this)">+</button>
-                    <button type="button" onclick="down_cnt(this)">-</button>
+                    &nbsp;
+                    <button type="button" onclick="del_buy_input_block(this)">X</button>
                 </div>
             </div>
             <div>
@@ -74,14 +75,15 @@
         <div class="sel_price_area" style="display: none;">
             <div id="sel_price_box">
                 <div class="sel_input_block input_block">
-                    <button type="button" onclick="del_sel_input_block(this)">X</button>
+                    <button type="button" onclick="down_quote_unit(this)">-</button>
                     <input placeholder="금액" type="number" pattern="\d*" name="sel_price[]" class="input_price">
                     <button type="button" onclick="up_quote_unit(this)">+</button>
-                    <button type="button" onclick="down_quote_unit(this)">-</button>
-                    /
+                    &nbsp;
+                    <button type="button" onclick="down_cnt(this)">-</button>
                     <input placeholder="수량" type="number" pattern="\d*" name="sel_cnt[]" class="input_cnt">
                     <button type="button" onclick="up_cnt(this)">+</button>
-                    <button type="button" onclick="down_cnt(this)">-</button>
+                    &nbsp;
+                    <button type="button" onclick="del_sel_input_block(this)">X</button>
                 </div>
             </div>
             <div>
@@ -153,7 +155,7 @@
                 totla_price += buy_cnt * buy_price;
             }
             var avg_price = totla_price / total_cnt;
-            avg_price = avg_price ? avg_price : 0;
+            avg_price = Math.round(avg_price ? avg_price : 0);
             real_avg_price = parseInt(avg_price + (avg_price * (trading_fees * 2 + tax_fees)));
 
             $('#buy_cnt').html(AC(total_cnt));
@@ -226,15 +228,15 @@
             var profit = (sel_avg_price - buy_avg_price) * sel_total_cnt;
             var real_profit = profit - (total_buy_price * trading_fees) - (sel_totla_price * trading_fees) - (sel_totla_price * tax_fees);
 
-            var profit_per = Math.floor(profit / total_buy_price * 10000) / 100;
-            var real_profit_per = Math.floor(real_profit / total_buy_price * 10000) / 100;
+            var profit_per = Math.round(profit / total_buy_price * 10000) / 100;
+            var real_profit_per = Math.round(real_profit / total_buy_price * 10000) / 100;
 
             $('#sel_cnt').html(AC(sel_total_cnt));
             $('#remaining_cnt').html(AC(remaining_cnt));
             $('#total_sel_price').html(AC(sel_totla_price));
-            $('#sel_avg_price').html(AC(Math.floor(sel_avg_price)));
-            $('#profit').html(AC(Math.floor(profit)));
-            $('#real_profit').html(AC(Math.floor(real_profit)));
+            $('#sel_avg_price').html(AC(Math.round(sel_avg_price)));
+            $('#profit').html(AC(Math.round(profit)));
+            $('#real_profit').html(AC(Math.round(real_profit)));
             $('#profit_per').html(profit_per);
             $('#real_profit_per').html(real_profit_per);
 
