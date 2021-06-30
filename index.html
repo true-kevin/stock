@@ -22,22 +22,28 @@
         #fee_box input[type=text] {
             width: 60px;
         }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
     </style>
     <div class="contaier" style="display: inline-block;margin: 0 auto;">
         <button type="button" onclick="fee_box_toggle()">수수료 보기</button>
         <div id="fee_box" style="display: none;">
-            거래 수수료: <input type="number" step="0.001" name="trading_fees" value="0.015" onchange="set_fees()">
-            세금: <input type="number" name="tax_fees" value="0.23" onchange="set_fees()">
+            거래 수수료: <input type="number" pattern="\d*" name="trading_fees" value="0.015" onchange="set_fees()">
+            세금: <input type="number" pattern="\d*" name="tax_fees" value="0.23" onchange="set_fees()">
         </div>
         <div class="buy_price_area">
             <div id="buy_price_box">
                 <div class="buy_input_block input_block">
                     <button type="button" onclick="del_buy_input_block(this)">X</button>
-                    <input placeholder="금액" type="text" name="buy_price[]" class="input_price">
+                    <input placeholder="금액" type="number" pattern="\d*" name="buy_price[]" class="input_price">
                     <button type="button" onclick="up_quote_unit(this)">+</button>
                     <button type="button" onclick="down_quote_unit(this)">-</button>
                     /
-                    <input placeholder="수량" type="text" name="buy_cnt[]" class="input_cnt">
+                    <input placeholder="수량" type="number" pattern="\d*" name="buy_cnt[]" class="input_cnt">
                     <button type="button" onclick="up_cnt(this)">+</button>
                     <button type="button" onclick="down_cnt(this)">-</button>
                 </div>
@@ -70,11 +76,11 @@
             <div id="sel_price_box">
                 <div class="sel_input_block input_block">
                     <button type="button" onclick="del_sel_input_block(this)">X</button>
-                    <input placeholder="금액" type="text" name="sel_price[]" class="input_price">
+                    <input placeholder="금액" type="number" pattern="\d*" name="sel_price[]" class="input_price">
                     <button type="button" onclick="up_quote_unit(this)">+</button>
                     <button type="button" onclick="down_quote_unit(this)">-</button>
                     /
-                    <input placeholder="수량" type="text" name="sel_cnt[]" class="input_cnt">
+                    <input placeholder="수량" type="number" pattern="\d*" name="sel_cnt[]" class="input_cnt">
                     <button type="button" onclick="up_cnt(this)">+</button>
                     <button type="button" onclick="down_cnt(this)">-</button>
                 </div>
@@ -158,7 +164,7 @@
 
             $('.sel_input_block').remove();
             add_sel_input_block();
-            $('.sel_input_block').eq(0).find("input[name='sel_price[]']").val(get_up_quote_unit(parseInt(avg_price)));
+            $('.sel_input_block').eq(0).find("input[name='sel_price[]']").val(get_up_quote_unit(parseInt(real_avg_price)));
             $('.sel_input_block').eq(0).find("input[name='sel_cnt[]']").val(total_cnt);
 
             $('.buy_result').show();
@@ -309,7 +315,7 @@
             cnt = cnt ? cnt : 0;
             $(el).closest('.input_block').find('.input_cnt').val(cnt - 1);
         }
-
+        
     </script>
 </body>
 
